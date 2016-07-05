@@ -1,0 +1,28 @@
+#!/bin/sh
+echo -e "\n"
+echo "Updating code ..."
+svn update
+echo "Building code ..."
+err=$(go build)
+
+pid=$(lsof -i:8080 |awk '{print $2}' | tail -n 1)
+if [ -n "$pid" ]
+then
+    kill -9 $pid
+    echo "Kill old proccess by pid: "$pid
+fi
+echo "Booting proccess ..."
+nohup ./webscan_bate &
+
+
+
+while [ -z "$(lsof -i:8080 |awk '{print $2}' | tail -n 1)" ]
+do
+   echo "waiting ..."
+   sleep 0.5
+done
+
+newPid=$(lsof -i:8080 |awk '{print $2}' | tail -n 1) 
+echo "Finish boot, pid: "$newPid
+echo -e "\n"
+tail -f nohup.out

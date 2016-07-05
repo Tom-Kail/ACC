@@ -1,0 +1,15 @@
+#!/bin/sh
+echo -e “Packing ...”
+bee pack
+day=$(date +%Y%m%d)
+ppath="/home/测试版本/"
+path=$ppath$day
+echo "path:"$path
+mkdir -p $path
+cp ./webscan_bate.tar.gz $path 
+svn add $ppath
+svn commit $pptah -m "add pack"
+rm -rf webscan_bate.tar.gz
+echo "Packing success."
+
+
