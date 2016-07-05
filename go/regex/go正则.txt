@@ -1,0 +1,127 @@
+﻿*系统不对带有 type:"passXSS"  标签的字段进行XSS攻击检测*
+
+
+UserID  	    string ` reg:"^\\d+$" err:"用户ID格式不正确" `
+Email           string `form:"Email" reg:"^[\\w\\.+-]{1,31}@[\\w+-]{1,9}(\\.[\\w-+]{1,9}){1,2}$|^$" err:"邮箱格式不正确"`
+Phone           string `form:"Phone" reg:"^\\d{11}$" err:"电话号码格式不正确"`
+Pwd     		string `form:"password" reg:"^\\S{8,}$" err:"密码长度小于8位" type:"passXSS"//支持所有可见字符，密码长度大于8位，不进行XSS过滤
+Ip                string `form:"ip" reg:"^(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])((\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])){3}|(\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])){5})(,(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])((\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])){3}|(\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])){5}))*$" err:"IP格式不正确"`
+DomainName 		  string `form:"domain_name" reg:"^([a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+)(,[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+)*$" err:"域名格式不正确"`
+LoginName         string `form:"login_name" reg:"^[a-zA-Z0-9_]{8,20}$" err:"登录名格式不正确，登录名长度为8到20，支持数字字母和下划线"`
+LoginLocktimes    string `json:"login_lock_times" form:"login_lock_times" reg:"^[0-5]$" err:"密码连续错误次数格式错误，只能为0-5" `
+LoginLockDuration string `json:"login_lock_duration" form:"login_lock_duration" reg:"^(0|[1-9][0-9]*)$" err:"错误登录锁定时间格式错误" `
+SmtpServer   	 string `json:"smtp_server" form:"smtp_server" reg:"^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$|^$" err:"邮件服务器格式不正确"`
+SmtpUser     	 string `json:"smtp_user" form:"smtp_user" reg:"^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$|^$" err:"电子邮件地址格式不正确"`
+SmtpPassword 	 string `json:"smtp_password" form:"smtp_password" type:"passXSS"`
+Url1 			 string `json:"url" reg:"^((http|https)://)(([a-zA-Z0-9\\._-]+\\.[a-zA-Z]{2,6})|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,4})?(/[0-9A-Za-z%_\\@.^~#;=]*)*(\\?[\\w-@^=%&;/\\.~+#]*)*$" err:"网址格式不正确"  type:"passXSS"`//必须带协议
+Url2 			 string `json:"url" reg:"^((http|https)://)?(([a-zA-Z0-9\\._-]+\\.[a-zA-Z]{2,6})|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,4})?(/[0-9A-Za-z%_\\@.^~#;=]*)*(\\?[\\w-@^=%&;/\\.~+#]*)*$" err:"网址格式不正确" type:"passXSS"`//不一定要带协议
+Answer1   		 string `form:"answer1" type:"passXS"`
+Answer2   		 string `form:"answer2" type:"passXS"`
+Answer3   		 string `form:"answer3" type:"passXS"`
+PolicyName       string   `form:"policy_name" reg:"^[\\p{Han}\\w]{1,20}$" err:"策略名称格式不正确"`
+SiteGroupName 	 string `orm:"column(site_group_name);size(255)" form:"site_group_name" reg:"^[\\p{Han}\\w_a-zA-Z0-9]{1,20}$" err:"分组名称格式不正确1-20位" `
+SiteName         string `orm:"column(site_name);size(128)" form:"site_name" reg:"^[\\S]{1,64}$" err:"网站名称格式不正确,长度需为1-64位" `
+AdminName        string `orm:"column(admin_name);size(128)" form:"admin_name" reg:"^[\\p{Han}\\w_a-zA-Z0-9]{0,20}$|^$" err:"管理员名格式不正确"`
+SiteUrl          string `orm:"column(site_url)" form:"site_url" reg:"^((http|https)://)(([a-zA-Z0-9\\._-]+\\.[a-zA-Z]{2,6})|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,4})?(/[0-9A-Za-z%_\\@.^~#;=]*)*(\\?[\\w-@^=%&;/\\.~+#]*)*$" err:"网址格式不正确，正确格式如下http://www.baidu.com" type:"passXSS"`
+AdminEmail       string `orm:"column(admin_email);size(128)" form:"admin_email" reg:"^[\\w\\.+-]{1,31}@[\\w+-]{1,9}(\\.[\\w-+]{1,9}){1,2}$|^$" err:"邮箱格式不正确"`
+AdminPhone       string `orm:"column(admin_phone);size(128)" form:"admin_phone" reg:"^\\d{11}$|^$" err:"手机号格式不正确"`
+TaskName    	 string         `json:"task_name" reg:"^[\\S]{1,20}$" err:"任务名称格式不正确"`
+TaskGroupName string `orm:"column(task_group_name);size(128)" form:"task_group_name" json:"task_group_name" reg:"^[\\S]{1,20}$" err:"任务分组名称格式不正确，长度为1-20"`
+
+FiltParaName string `reg:"^(^[\\w]+(,[\\w]+)*$)?$" err:"过滤参数格式不正确"`
+SpecialList  string `reg:"^(^(((http|ftp|https)://)?(([a-zA-Z0-9\\._-]+\\.[a-zA-Z]{2,6})|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,4})?(/[0-9A-Za-z%_]*)*)+(,(((http|ftp|https)://)?(([a-zA-Z0-9\\._-]+\\.[a-zA-Z]{2,6})|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,4})?(/[0-9A-Za-z%_]*)*))*$)?$" err:"err"`
+ImageList          string `reg:"^(^[\\w]+(,[\\w]+)*$)?$" err:"err"`
+MaxValid           string `reg:"^\\d{1,10}$" err:"最大的有效参数数量格式错误"`
+KeyParaList        string `reg:"^(^[\\w]+(,[\\w]+)*$)?$" err:"关键参数格式不正确"`
+SpecKeyList        string `reg:"^(^[\\w]+(,[\\w]+)*$)?$" err:"特殊参数格式不正确"`
+SimilarFeatureList string `reg:"^(^[\\w]+(,[\\w]+)*$)?$" err:"相似度特征列表格式不正确"`
+SimilarParaList    string `reg:"^(^[\\w]+(,[\\w]+)*$)?$" err:"相似度参数列表格式不正确"`
+PluginList         string `reg:"^(^[\\w]+(,[\\w]+)*$)?$" err:"过滤插件名字列表格式不正确"`
+DynamicLibList     string `reg:"^(^[\\w%\\.]+(,[\\w%\\.]+)*$)?$" err:"动态插件列表格式不正确"`
+FiltRule           string `reg:"^[01]{8}$" err:"过滤规则格式不正确"`
+TimeOut            string `reg:"^\\d{1,10}$" err:"timeout时间格式不正确"`
+ConnectTimeOut     string `reg:"^\\d{1,10}$" err:"链接超时时间设置"`
+
+DynamicSuffixList string `reg:"^(^[\\w]+(,[\\w]+)*$)?$" err:"动态后缀列表格式错误"`
+StaticSuffixList  string `reg:"^(^[\\w]+(,[\\w]+)*$)?$" err:"静态后缀列表格式错误"`
+Cookie            string
+BlackList         string `reg:"^(^(((http|ftp|https)://)?(([a-zA-Z0-9\\._-]+\\.[a-zA-Z]{2,6})|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,4})?(/[0-9A-Za-z%_]*)*)+(,(((http|ftp|https)://)?(([a-zA-Z0-9\\._-]+\\.[a-zA-Z]{2,6})|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,4})?(/[0-9A-Za-z%_]*)*))*$)?$" err:"黑名单列表格式错误"`
+WhiteList         string `reg:"^(^(((http|ftp|https)://)?(([a-zA-Z0-9\\._-]+\\.[a-zA-Z]{2,6})|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,4})?(/[0-9A-Za-z%_]*)*)+(,(((http|ftp|https)://)?(([a-zA-Z0-9\\._-]+\\.[a-zA-Z]{2,6})|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,4})?(/[0-9A-Za-z%_]*)*))*$)?$" err:"白名单列表格式错误"`
+MaxDepth          string `reg:"^((\\-1)|(\\d{1,10}))$" err:"最大深度格式错误"`
+MaxUrlNum         string `reg:"^((\\-1)|(\\d{1,10}))$" err:"最大URL数量格式错误"`
+ReferDirectory    string `reg:"^((http|ftp|https)://)?(([a-zA-Z0-9\\._-]+\\.[a-zA-Z]{2,6})|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,4})?(/[0-9A-Za-z%_]*)*(\\s|$)" err:"仅扫描此目录下的链接格式不正确"`
+DomainLimit       string `reg:"^[123]$" err:"域名深度限制格式不正确"`
+
+
+/******************************************************************************************/
+
+//未定义结构体的模板
+type Request struct {
+	LoginName string `reg:"^[a-zA-Z0-9_]{8,20}$" err:"登录名格式不正确"`
+}
+
+regReq := Request{
+	LoginName: login_name,
+}
+el := utils.TagS(&regReq)
+if len(el) != 0 {
+	this.Data["json"] = map[string]interface{}{"status": false, "msg": el}
+	this.ServeJSON()
+	return
+}
+
+
+//已定义结构体的模板
+el := utils.TagS(&req)
+if len(el) != 0 {
+	this.Data["json"] = map[string]interface{}{"status": false, "msg": el}
+	this.ServeJSON()
+	return
+}
+
+
+
+//正则验证和XSS攻击判断函数
+func TagS(T interface{}) (err []string) {
+	val := reflect.ValueOf(T)
+	if val.Kind() != reflect.Ptr {
+		panic(fmt.Errorf("arg must be use ptr"))
+	}
+	ind := reflect.Indirect(val)
+	etyp := ind.Type()
+	typ := etyp
+	if typ.Kind() == reflect.Ptr {
+		typ = typ.Elem()
+	}
+	eval := val.Elem()
+	var v, r, e string
+	for i := 0; i < ind.NumField(); i++ {
+		if eval.Field(i).Kind() != reflect.String {
+			continue
+		}
+		typ := etyp.Field(i).Tag.Get("type")
+		if typ == "json" {
+			//不对json进行验证
+			continue
+		}
+
+		v = eval.Field(i).String()
+		if typ != "passXSS" {
+			if IsXSSAttack(v) == true {
+				err = append(err, `包含非法字符 ' " \ < > &`)
+				return
+			}
+		}
+
+		r = etyp.Field(i).Tag.Get("reg")
+		e = etyp.Field(i).Tag.Get("err")
+		if r != "" {
+			b1, _ := regexp.MatchString(r, v)
+			if b1 == false {
+				err = append(err, e)
+			}
+		}
+	}
+	return
+}
+
