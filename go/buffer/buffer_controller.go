@@ -37,6 +37,7 @@ func ReadFile(src string, c *MainController) error {
 		c.Ctx.ResponseWriter.Flush()
 	}
 	c.Ctx.ResponseWriter.Header().Set("Content-Type", "application/octet-stream")
+	c.Ctx.ResponseWriter.Header().Set("Content-Disposition", "attachment;filename="+src)
 	return nil
 }
 func (this *MainController) Get() {
